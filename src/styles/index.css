@@ -1,0 +1,621 @@
+@import "tailwindcss";
+@import "@fontsource/michroma/400.css";
+@import "@fontsource/barlow/400.css";
+@import "@fontsource/barlow/500.css";
+@import "@fontsource/barlow/600.css";
+@import "@fontsource/barlow/500-italic.css";
+
+/* Devices with a real pointer. Touch screens get explicit controls instead of hover. */
+@custom-variant hover-device (@media (hover: hover) and (pointer: fine));
+
+/*
+  Design tokens. Every colour, font, radius, shadow and easing on the site comes from here.
+
+  CasualBud takes its identity from the logo: an off-white winged B and a wide geometric
+  wordmark, drawn for a dark ground, over "Dress your mood". So the site is dark: a charcoal
+  page close to the concrete walls in the photographs, slightly lifted panels, and the logo's
+  warm off-white for type and primary buttons. One accent, the mood, changes with the mood
+  he picks in the hero (Easy sage, Bold rust, Sharp ice, Rugged tan) and colours the
+  hover fills, active marks and the italic word. Michroma, wide like the wordmark, sets
+  headlines in capitals; Barlow carries everything you read.
+
+  Note: `ink` is the light text colour and `paper` the raised dark surface here; the names
+  are kept so shared components stay correct on the dark ground.
+*/
+@theme {
+  --color-bone: #121211;
+  --color-sand: #22211f;
+  --color-paper: #1b1a19;
+  --color-mist: #1f1e1c;
+  --color-mist-deep: #2b2a27;
+  --color-ink: #f2ece4;
+  --color-night: #f2ece4;
+  --color-plum: #0b0b0a;
+  --color-ink-soft: #a39c92;
+  --color-sale: #ef6a4f;
+  --color-mood: #c9a77c;
+  --color-line: rgb(242 236 228 / 0.12);
+  --color-line-strong: rgb(242 236 228 / 0.24);
+  --color-success: #79c08f;
+  --color-danger: #ef6a4f;
+
+  --color-stone: var(--color-bone);
+  --color-stone-deep: var(--color-sand);
+  --color-ink-hover: var(--color-mood);
+  --color-bronze: var(--color-ink);
+  --color-bronze-bright: var(--color-mood);
+  --color-bronze-soft: var(--color-mist);
+
+  --font-display: "Michroma", "Eurostile", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Barlow", ui-sans-serif, system-ui, sans-serif;
+  --font-hand: "Barlow", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 4px;
+  --radius-field: 4px;
+
+  --shadow-float: 0 16px 34px -18px rgb(0 0 0 / 0.7);
+  --shadow-lift: 0 30px 60px -28px rgb(0 0 0 / 0.8);
+  --shadow-card: 0 20px 40px -24px rgb(0 0 0 / 0.7);
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-spring: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    color-scheme: dark;
+    scrollbar-color: var(--color-mist-deep) var(--color-bone);
+  }
+
+  body {
+    @apply bg-bone font-sans text-ink antialiased;
+    font-size: 16px;
+    -webkit-tap-highlight-color: transparent;
+    caret-color: var(--color-mood);
+  }
+
+  ::selection {
+    background: var(--color-mood);
+    color: var(--color-bone);
+  }
+
+  :focus-visible {
+    outline: 1.5px solid var(--color-mood);
+    outline-offset: 3px;
+  }
+
+  button,
+  [role="button"],
+  a,
+  label[for],
+  select {
+    cursor: pointer;
+  }
+
+  button {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  img {
+    -webkit-user-drag: none;
+  }
+
+  p,
+  li {
+    text-wrap: pretty;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  a {
+    text-underline-offset: 4px;
+  }
+
+  input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-bone);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-mist-deep);
+    border: 3px solid var(--color-bone);
+    border-radius: 99px;
+  }
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-[1440px] px-4 sm:px-6 lg:px-10;
+  }
+
+  /* Wide capitals, like the wordmark. Used at modest sizes; it is a broad face. */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    line-height: 1.12;
+  }
+
+  /* Product names (kept under this name for the shared components). */
+  .serif-italic {
+    font-family: var(--font-sans);
+    font-weight: 500;
+  }
+
+  /* The accent word: Barlow italic in the mood colour. */
+  .hand {
+    font-family: var(--font-hand);
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--color-mood);
+    transition: color 600ms var(--ease-out);
+  }
+
+  /* Small labels, spaced like the tagline. */
+  .caps {
+    font-family: var(--font-sans);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+  .bubble,
+  .bubble-r {
+    border-radius: var(--radius-card);
+  }
+
+  .field {
+    @apply h-12 w-full border border-line-strong bg-paper px-4 text-[15px] text-ink outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-ink-soft;
+    border-radius: var(--radius-field);
+  }
+  .field:focus {
+    border-color: var(--color-mood);
+    box-shadow: 0 0 0 3px rgb(201 167 124 / 0.18);
+  }
+  .field[aria-invalid="true"] {
+    border-color: var(--color-danger);
+  }
+
+  /*
+    Button: off-white on charcoal. On hover the mood colour wipes in from the left and the
+    arrow travels. Variants set --btn-bg / --btn-fg / --btn-fill / --btn-fill-fg / --btn-ring.
+  */
+  .btn {
+    --btn-bg: var(--color-ink);
+    --btn-fg: var(--color-bone);
+    --btn-fill: var(--color-mood);
+    --btn-fill-fg: var(--color-bone);
+    --btn-ring: transparent;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    white-space: nowrap;
+    border-radius: var(--radius-field);
+    background: var(--btn-bg);
+    color: var(--btn-fg);
+    box-shadow: inset 0 0 0 1px var(--btn-ring);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    transition:
+      color 300ms var(--ease-out),
+      box-shadow 300ms var(--ease-out),
+      transform 160ms var(--ease-out);
+  }
+  .btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--btn-fill);
+    clip-path: inset(0 100% 0 0);
+    transition:
+      clip-path 460ms var(--ease-out),
+      background-color 600ms var(--ease-out);
+  }
+  .btn:active {
+    transform: scale(0.98);
+  }
+  .btn:disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+  .btn .btn-arrow {
+    transition: transform 300ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .btn:hover {
+      color: var(--btn-fill-fg);
+      box-shadow: inset 0 0 0 1px transparent;
+    }
+    .btn:hover::before {
+      clip-path: inset(0 0 0 0);
+    }
+    .btn:hover .btn-arrow {
+      transform: translateX(6px);
+    }
+    .group:hover .btn-group {
+      color: var(--btn-fill-fg);
+      box-shadow: inset 0 0 0 1px transparent;
+    }
+    .group:hover .btn-group::before {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  .link-line {
+    position: relative;
+    padding-block: 2px;
+  }
+  .link-line::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--color-mood);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 320ms var(--ease-out);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .link-line:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+  }
+  .link-line[aria-current="page"]::after,
+  .link-line[data-active="true"]::after {
+    transform: scaleX(1);
+  }
+
+  .link-under {
+    text-decoration: underline;
+    text-decoration-color: var(--color-mood);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 5px;
+    transition:
+      text-decoration-thickness 200ms ease,
+      text-underline-offset 200ms ease;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .link-under:hover {
+      text-decoration-thickness: 2px;
+      text-underline-offset: 3px;
+    }
+  }
+
+  .press {
+    transition: transform 160ms var(--ease-out);
+  }
+  .press:active {
+    transform: scale(0.96);
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .swash {
+    background-image: linear-gradient(var(--color-mood), var(--color-mood));
+    background-repeat: no-repeat;
+    background-size: 100% 0.08em;
+    background-position: 0 96%;
+  }
+
+  /* The tagline's rules: a hairline either side of a spaced label. */
+  .ruled-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .ruled-label::before,
+  .ruled-label::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: currentColor;
+    opacity: 0.5;
+  }
+}
+
+@keyframes stamp {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5) rotate(-8deg);
+    filter: blur(3px);
+  }
+  30% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(0.96) rotate(0deg);
+    filter: blur(0);
+  }
+  75% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+@keyframes press {
+  0% {
+    opacity: 0;
+    transform: scale(1.18);
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 0.9;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+@keyframes lift {
+  0% {
+    opacity: 0.95;
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-16px) scale(1.12);
+  }
+}
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+  50% {
+    transform: translateY(5px) rotate(-6deg);
+  }
+}
+@keyframes roll {
+  from {
+    transform: translateY(60%);
+    opacity: 0;
+  }
+}
+@keyframes ring {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes pop {
+  40% {
+    transform: scale(1.3);
+  }
+}
+@keyframes bump {
+  35% {
+    transform: scale(1.35);
+  }
+}
+@keyframes progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes draw {
+  from {
+    stroke-dashoffset: var(--len, 60);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes shake {
+  20%,
+  60% {
+    transform: translateX(-4px);
+  }
+  40%,
+  80% {
+    transform: translateX(4px);
+  }
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes ping-soft {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  80%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+@keyframes burst {
+  from {
+    transform: translate(-50%, -50%) rotate(var(--a)) translateY(0) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(var(--a)) translateY(-18px) scale(0.3);
+    opacity: 0;
+  }
+}
+@keyframes swash-in {
+  from {
+    background-size: 0% 1px;
+  }
+}
+@keyframes rise {
+  from {
+    clip-path: inset(100% 0 0 0 round var(--radius-card));
+    transform: translateY(20px);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round var(--radius-card));
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .anim-fade-up {
+    animation: fade-up 650ms var(--ease-out) both;
+    animation-delay: var(--delay, 0ms);
+  }
+  .anim-fade-in {
+    animation: fade-in 450ms ease both;
+    animation-delay: var(--delay, 0ms);
+  }
+  .anim-stamp {
+    animation: stamp 1300ms var(--ease-out) both;
+  }
+  .anim-press {
+    animation: press 380ms var(--ease-out) both;
+  }
+  .anim-lift {
+    animation: lift 520ms var(--ease-out) both;
+  }
+  .anim-nudge {
+    animation: nudge 1.8s var(--ease-in-out) infinite;
+  }
+  .anim-roll {
+    animation: roll 420ms var(--ease-out) both;
+  }
+  .ring-timer {
+    animation-name: ring;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+  }
+  .group\/hero:hover .ring-timer {
+    animation-play-state: paused;
+  }
+  .anim-pop {
+    animation: pop 420ms var(--ease-spring);
+  }
+  .anim-bump {
+    animation: bump 450ms var(--ease-spring);
+  }
+  .anim-shake {
+    animation: shake 360ms ease;
+  }
+  .anim-draw {
+    stroke-dasharray: var(--len, 60);
+    animation: draw 600ms var(--ease-out) 200ms both;
+  }
+  .anim-swash {
+    animation: swash-in 900ms var(--ease-out) 400ms both;
+  }
+  .spin-slow {
+    animation: spin-slow 18s linear infinite;
+  }
+  .marquee-track {
+    animation: marquee var(--marquee-duration, 40s) linear infinite;
+  }
+  .ping-soft {
+    animation: ping-soft 1.8s var(--ease-out) infinite;
+  }
+  .burst-dot {
+    animation: burst 600ms var(--ease-out) both;
+  }
+
+  [data-reveal="armed"] {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  [data-reveal="in"] {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 700ms var(--ease-out),
+      transform 900ms var(--ease-out);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  [data-reveal-frame="armed"] {
+    clip-path: inset(100% 0 0 0 round var(--radius-card));
+    transform: translateY(20px);
+  }
+  [data-reveal-frame="in"] {
+    animation: rise 1000ms var(--ease-out) both;
+    animation-delay: var(--reveal-delay, 0ms);
+  }
+
+  .hero-progress {
+    animation: progress var(--duration) linear forwards;
+  }
+  .hero-progress[data-paused="true"] {
+    animation-play-state: paused;
+  }
+
+  .page-enter {
+    animation: fade-in 400ms ease both;
+  }
+}
+
+.hero-progress {
+  transform-origin: left;
+}
+
+.ring-timer {
+  stroke-dashoffset: 100;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ring-timer {
+    stroke-dashoffset: 0;
+  }
+}
+
+.anim-press {
+  opacity: 0.9;
+}
+@media (prefers-reduced-motion: reduce) {
+  .anim-lift {
+    display: none;
+  }
+}
+
