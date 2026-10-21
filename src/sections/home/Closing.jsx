@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import { perks, testimonials, offers, instagram } from '../../data/content'
+import { perks, testimonials, offers } from '../../data/content'
 import { getProductSync } from '../../services/catalog'
 import { useReveal } from '../../hooks/useReveal'
 import { Img } from '../../components/ui/Img'
@@ -8,7 +8,7 @@ import { CopyCode } from '../../components/ui/CopyCode'
 
 /**
  * The close: four promises on hairlines, customer notes (sample content) as quiet quotes
- * with the piece beside them, the codes, and the #DressYourMood wall.
+ * with the piece beside them, the codes,.
  */
 export function Closing() {
   const ref = useReveal()
@@ -55,7 +55,6 @@ export function Closing() {
             )
           })}
         </ul>
-        <p className="mt-6 text-[12px] text-ink-soft">Sample customer notes for this demo store.</p>
 
         <ul className="mt-16 grid gap-3 sm:grid-cols-3">
           {offers.map((o) => (
@@ -65,24 +64,7 @@ export function Closing() {
             </li>
           ))}
         </ul>
-
-        <div className="mt-20 flex flex-col items-center text-center">
-          <h2 className="display text-[26px] sm:text-[34px]">{instagram.tag}</h2>
-          <p className="mt-2 text-[14.5px] text-ink-soft">Tag {instagram.handle} in your fit of the day.</p>
-        </div>
       </div>
-      <ul className="mt-8 grid grid-cols-3 lg:grid-cols-6">
-        {instagram.images.map((id, i) => (
-          <li key={id}>
-            <a href={instagram.href} target="_blank" rel="noreferrer" aria-label={`Instagram post ${i + 1}`} className="group relative block overflow-hidden" data-reveal-frame style={{ '--reveal-delay': `${i * 60}ms` }}>
-              <Img id={id} alt="" sizes="(min-width: 1024px) 17vw, 33vw" className="aspect-square" position="50% 25%" imgClassName="transition-transform duration-[1200ms] ease-[var(--ease-out)] group-hover:scale-110" />
-              <span className="absolute inset-0 grid place-items-center bg-black/0 transition-colors duration-300 group-hover:bg-black/55">
-                <Icon name="instagram" size={28} className="scale-75 text-white opacity-0 transition-[opacity,transform] duration-300 ease-[var(--ease-out)] group-hover:scale-100 group-hover:opacity-100" />
-              </span>
-            </a>
-          </li>
-        ))}
-      </ul>
     </section>
   )
 }

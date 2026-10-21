@@ -88,13 +88,6 @@ export const testimonials = [
   { name: 'Faiz Khan', city: 'Hyderabad', rating: 5, productId: 'b02', text: 'The sherpa jacket is warm without being bulky. Suede feel is surprisingly good.' },
 ]
 
-export const instagram = {
-  handle: '@casualbud',
-  tag: '#DressYourMood',
-  href: 'https://instagram.com',
-  images: ['b06-1', 'b21-1', 'b31-1', 'b36-1', 'b23-1', 'b55-1'],
-}
-
 export const offers = [
   { title: '10% off everything', code: 'MOOD10' },
   { title: '10% off a shirt and trouser fit', code: 'FIT10' },
